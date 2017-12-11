@@ -92,9 +92,6 @@ void MeteoData::read(int source, int id){
           while (client.available()) {
             jsonData[i] = client.read();
             i++;
-          } else {
-            Serial.println(jsonData);
-            return;
           }
 
           JsonObject& root = jsonBuffer.parseObject(jsonData);
@@ -124,7 +121,6 @@ void MeteoData::read(int source, int id){
       }
 
       //================VU data parse================
-
       if (source == SOURCE_VU){
 
           if (client.find("wup(")) {
@@ -133,9 +129,6 @@ void MeteoData::read(int source, int id){
             while (client.available()) {
               jsonData[i] = client.read();
               i++;
-            } else {
-              Serial.println(jsonData);
-              return;
             }
 
             JsonObject& root = jsonBuffer.parseObject(jsonData);
@@ -164,9 +157,18 @@ void MeteoData::read(int source, int id){
           }
       }
 
-
   } else {
     error_code = HOST_ERROR;
     return;
   }
+}
+
+float MeteoData::getHumidity(float T, float TD) {
+
+  float hum = 100 * pow((112 - 0.1 * T + TD) / (112 + 0.9 * T), 8);
+
+  if (hum > 99 ){
+    hum = 99;
+  }
+  return hum;
 }

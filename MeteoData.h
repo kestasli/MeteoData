@@ -19,6 +19,7 @@ public:
   float pressure;
 private:
   int convertWindDirection(const char* direction);
+  float getHumidity(float T, float TD);
   const int port = 80;
   const char *host_VU = "www.hkk.gf.vu.lt";
   const char *url_VU = "/json.php";
